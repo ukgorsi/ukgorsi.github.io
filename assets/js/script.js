@@ -1,278 +1,486 @@
-// const IMG = new Image();
-// const EMAIL_PATTERNS = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-const DOC = new jsPDF("p", "pt", "A4");
-const ALL = "all";
-const ASP = "aspnet";
-const ANG = "angular";
-const WORD = "wordpress";
+/*
+  Template Name: Morex - Personal Portfolio HTML Template
+  Author Name: Hook theme
+  Author URL: https://themeforest.net/user/hooktheme
+  Version: 1.0.0
+*/
 
-// getPlatformName = (s) => console.log(s[0].link);
+"use strict";
 
-// data
-(async () => {
-  //#region cloud data
-  // const response = await fetch('https://api.perspective-v.com/graph/resume', {
-  //     method: 'POST',
-  //     headers: {
-  //         "Content-Type": "application/json",
-  //         "Accept": "*/*",
-  //     },
-  //     body: JSON.stringify({
-  //         query: `query getMyResume($token:String!){
-  //             getByAccessToken(accesToken:$token){
-  //                   name,
-  //                   htmlTemplate,
-  //                   jsonData
-  //                 }
-  //               }`,
-  //         variables: {
-  //             token: 'oN6XTVOnUk2R5HQgW90cOg=='
-  //         }
-  //     })
-  // });
-  // const body = await response.json();
-  // var data = JSON.parse(body.data.getByAccessToken.jsonData);
-  //#endregion cloud data
 
-  //#region local data
-  $.getJSON("./assets/data/data.json", (data) => {
+const preLoader = function () {
+  let preloaderWrapper = document.getElementById("preloader");
+  window.onload = () => {
+    let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test( navigator.userAgent) ? true : false;
+    if (!isMobile) {
+      setTimeout(function () {
+        preloaderWrapper.classList.add("preloaded");
+      }, 300);
+      setTimeout(function () {
+        preloaderWrapper.remove();
+      }, 1000);
+    } else {
+      preloaderWrapper.remove();
+    }    
+  };
+};
+preLoader();
 
-    //#region basic info
-    $(".navbar-brand, .name").append(data.fullName);
-    $(".category").append(data.profession);
-    document.querySelector(".profile-image").src = data.profileImageUrl;
-    // document.querySelector('.linkedIn_pdf').href = getPlatformName(data.socailLinks);
-    $(".aboutMe").append(data.about);
-    // $(".miniIntro").append();
-    var basicInformation = [
-      "Mobile",
-      "Email",
-      "Address",
-      "Industry",
-      "Languages",
-    ];
-    $.each(basicInformation, (i, value) => {
-      $(".pInfo .text-uppercase").append(value + ":" + "<br><br>");
-    });
-    $.each(data.basicInfo, (i, value) => {
-      $(".pInfoValue").append(
-        value != null && value === `${/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/g}`
-          ? `<a href="mailto:${value}">${value}</a><br><br>`
-          : value + "<br><br>"
-      );
-    });
-    //#endregion basic info
+// getSiblings
+var getSiblings = function (elem) {
+  const siblings = [];
+  let sibling = elem.parentNode.firstChild;
+  while (sibling) {
+    if (sibling.nodeType === 1 && sibling !== elem) {
+      siblings.push(sibling);
+    }
+    sibling = sibling.nextSibling;
+  }
+  return siblings;
+};
 
-    //#region skills
-    $.each(data.skills, (i, skill) => {
-      $(".skills").append(`
-            <div class="col-md-4 skill">
-                <div class="progress-container progress-primary"><span class="progress-badge">${skill.name}</span>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-primary" data-aos="progress-full" data-aos-offset="10"
-                            data-aos-duration="2000" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                            aria-valuemax="100" style="width: ${skill.percentage}%"></div><span class="progress-value">${skill.percentage}%</span>
-                    </div>
-                </div>
-            </div>
-        `);
-    });
-    //#endregion skills
+/* Slide Up */
+var slideUp = (target, time) => {
+  const duration = time ? time : 500;
+  target.style.transitionProperty = "height, margin, padding";
+  target.style.transitionDuration = duration + "ms";
+  target.style.boxSizing = "border-box";
+  target.style.height = target.offsetHeight + "px";
+  target.offsetHeight;
+  target.style.overflow = "hidden";
+  target.style.height = 0;
+  window.setTimeout(() => {
+    target.style.display = "none";
+    target.style.removeProperty("height");
+    target.style.removeProperty("overflow");
+    target.style.removeProperty("transition-duration");
+    target.style.removeProperty("transition-property");
+  }, duration);
+};
 
-    //#region portfolio
-    $.each(data.portfolioHeadings, (i, ph) => {
-      $(".portfolio-heading").append(`
-        <li class="nav-item ${ph.link}"><a class="nav-link ${ph.active}" data-toggle="tab" href="#${ph.link}" role="tablist">${ph.name}</a></li>
-      `);
-    });
+/* Slide Down */
+var slideDown = (target, time) => {
+  const duration = time ? time : 500;
+  target.style.removeProperty("display");
+  let display = window.getComputedStyle(target).display;
+  if (display === "none") display = "block";
+  target.style.display = display;
+  const height = target.offsetHeight;
+  target.style.overflow = "hidden";
+  target.style.height = 0;
+  target.offsetHeight;
+  target.style.boxSizing = "border-box";
+  target.style.transitionProperty = "height, margin, padding";
+  target.style.transitionDuration = duration + "ms";
+  target.style.height = height + "px";
+  window.setTimeout(() => {
+    target.style.removeProperty("height");
+    target.style.removeProperty("overflow");
+    target.style.removeProperty("transition-duration");
+    target.style.removeProperty("transition-property");
+  }, duration);
+};
 
-    $(`#portfolios .container`).append(`
-      <div class="tab-pane">
-        <div class="row" id="${ALL}"></div>
-        <div class="row" id="${ASP}"></div>
-        <div class="row" id="${ANG}"></div>
-        <div class="row" id="${WORD}"></div>
-      </div>
-    `);
+// Get window top offset
+function TopOffset(el) {
+  let rect = el.getBoundingClientRect(),
+    scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  return { top: rect.top + scrollTop };
+}
 
-    $.each(data.portfolios, (i, p) => {
-      Portfolios(p);
-    });
-    //#endregion portfolio
+// Header sticky activation
+const headerStickyWrapper = document.querySelector("header");
+const headerStickyTarget = document.querySelector(".header__sticky");
 
-    //#region experiences
-    $.each(data.experiences, (i, exp) => {
-      $(".experiences-list").append(`
-                <div class="card">
-                    <div class="row education">
-                        <div class="col-md-3 bg-primary" data-aos="fade-right" data-aos-offset="50" data-aos-duration="500">
-                            <div class="card-body cc-education-header">
-                                <p>${exp.duration}</p>
-                                <div class="h5">${exp.profession}</div>
-                            </div>
-                        </div>
-                        <div class="col-md-9" data-aos="fade-left" data-aos-offset="50" data-aos-duration="500">
-                            <div class="card-body">
-                                <div class="h5">${exp.company}</div>
-                                <p class="category"></p>
-                                <p>${exp.description.replace(/\n/g, "<br>")}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `);
-    });
-    //#endregion experiences
+if (headerStickyTarget) {
+  let headerHeight = headerStickyWrapper.clientHeight;
+  window.addEventListener("scroll", function () {
+    let StickyTargetElement = TopOffset(headerStickyWrapper);
+    let TargetElementTopOffset = StickyTargetElement.top;
 
-    //#region education
-    $.each(data.education, (i, edu) => {
-      $(".education-list").append(`
-            <div class="card">
-                <div class="row education">
-                    <div class="col-md-3 bg-primary" data-aos="fade-right" data-aos-offset="50" data-aos-duration="500">
-                        <div class="card-body cc-education-header">
-                            <p>${edu.yearOfGraduation}</p>
-                            <div class="h5">${edu.degree}</div>
-                        </div>
-                    </div>
-                    <div class="col-md-9" data-aos="fade-left" data-aos-offset="50" data-aos-duration="500">
-                        <div class="card-body">
-                            <div class="h5">${edu.subject}</div>
-                            <p class="category">${edu.institution}</p>
-                            <p>${edu.summary}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `);
-    });
-    //#endregion education
+    if (window.scrollY > TargetElementTopOffset) {
+      headerStickyTarget.classList.add("sticky");
+    } else {
+      headerStickyTarget.classList.remove("sticky");
+    }
+  });
+}
 
-    //#region testimonials
-    $.each(data.testimonials, (i, t) => {
-      $(".carousel-indicators").append(
-        `<li class="carousel-indicator" data-target="#cc-Indicators" dataSlideTo="0"></li>`
-      );
-      if (i == 0) {
-        $(".carousel-indicator").addClass("active");
-        $(".carousel-inner").append(`<div class="carousel-item active">
-                <div class="row testimonial">
-                    <div class="col-lg-2 col-md-3 cc-reference-header">
-                        <a target="_blank">
-                            <img src="${t.imageUrl}" alt="${t.name}'s Image" />
-                        </a>
-                        <div class="h5 pt-2">${t.name}</div> <p class="category">${t.country}</p> </div>
-                    <div class="col-lg-10 col-md-9"> <p>${t.review}</p> </div>
-                </div>
-            </div>`);
+// Scroll up activation
+const scrollTop = document.getElementById("scroll__top");
+if (scrollTop) {
+  scrollTop.addEventListener("click", function () {
+    window.scroll({ top: 0, left: 0, behavior: "smooth" });
+  });
+  window.addEventListener("scroll", function () {
+    if (window.scrollY > 300) {
+      scrollTop.classList.add("active");
+    } else {
+      scrollTop.classList.remove("active");
+    }
+  });
+}
+
+
+/*  ----- Dark to light mode js ----- */
+const lightToDarkButton = document.getElementById("light__to--dark");
+lightToDarkButton?.addEventListener("click", function () {
+    if (localStorage.getItem("theme-color")) {
+      if (localStorage.getItem("theme-color") === "light") {
+        document.documentElement.classList.add("dark");
+        localStorage.setItem("theme-color", "dark");
+        lightToDarkButton?.classList.add("dark--version");
       } else {
-        $(".carousel-indicator").removeClass("active");
-        $(".carousel-inner").append(`<div class="carousel-item">
-                <div class="row testimonial">
-                    <div class="col-lg-2 col-md-3 cc-reference-header">
-                        <a target="_blank">
-                            <img src="${t.imageUrl}" alt="${t.name}'s Image" />
-                        </a>
-                        <div class="h5 pt-2">${t.name}</div> <p class="category">${t.country}</p> </div>
-                    <div class="col-lg-10 col-md-9"> <p>${t.review}</p> </div>
-                </div>
-            </div>`);
+        document.documentElement.classList.remove("dark");
+        localStorage.setItem("theme-color", "light");
+        lightToDarkButton?.classList?.remove("dark--version");
+      }
+    } else {
+      if (document.documentElement.classList.contains("dark")) {
+        document.documentElement.classList.remove("dark");
+        lightToDarkButton?.classList?.remove("dark--version");
+        localStorage.setItem("theme-color", "light");
+      } else {
+        document.documentElement.classList.add("dark");
+        localStorage.setItem("theme-color", "dark");
+        lightToDarkButton?.classList.add("dark--version");
+      }
+    }
+});
+
+
+// Toggle navigation
+const toggleNavButton = document.querySelector(".toggle__navigation--button");
+const onBodyClick = handleBodyClick.bind(this);
+toggleNavButton?.addEventListener("click", (event) => {
+  event.preventDefault();
+  if(toggleNavButton.parentElement.classList.contains("menu--visible")){
+    toggleNavButton.parentElement.classList.remove("menu--visible");
+    document.body.removeEventListener("click", onBodyClick);
+  }else{
+    toggleNavButton.parentElement.classList.add("menu--visible");
+    document.body.addEventListener("click", onBodyClick);
+  }
+})
+function handleBodyClick(evt) {
+  const target = evt.target;
+  if (!target.closest(".toggle__navigation--button") && !target.closest(".toggle__navigation")) {
+    document.body.removeEventListener("click", onBodyClick);
+    if(toggleNavButton.parentElement.classList.contains("menu--visible")){
+      toggleNavButton.parentElement.classList.remove("menu--visible");
+    }
+  }
+} 
+
+
+/** -------- Isotope activation js ----------- **/
+
+const isotopeGrid = document.querySelector(".portfolio__grid");
+if(isotopeGrid){
+  imagesLoaded(isotopeGrid, function( instance ) {
+    // init Isotope
+    var iso = new Isotope(isotopeGrid, {
+      itemSelector: '.element-item',
+      percentPosition: true,
+      masonry: {
+        columnWidth: ".element-item"
       }
     });
-    //#endregion testimonials
 
-    //#region pdf data
-    $(".username_pdf").append(data.fullName);
-    $(".profession_pdf").append(data.profession);
-    $(".address_pdf").append(data.basicInfo.address);
-    $(".mailAndMobile_pdf").append(
-      data.basicInfo.mobile + " - " + data.basicInfo.email
-    );
-    $(".about_pdf").append(data.about);
-    // doc.textWithLink(text, {url: getPlatformName(data.links) });
-    // document.querySelector(".linkedIn_pdf").href = getPlatformName(
-    //   data.socialLinks
-    // );
-    $.each(data.skills, (i, skill) =>
-      $(".skill_pdf").append(`${skill.name}, `)
-    );
-    $.each(data.education, (i, edu) =>
-      $(".education_pdf").append(
-        `<p>${edu.institution} - ${edu.subject}<br>${edu.yearOfGraduation}</p><br>`
-      )
-    );
-    $.each(data.experiences, (i, exp) => {
-      $(".experience_pdf").append(
-        `<p><b>${exp.profession} - ${exp.company}</b><br>${exp.duration}<br>${exp.description}</p><br>`
-      );
+    // filter functions
+    var filterFns = {
+      // show if number is greater than 50
+      numberGreaterThan50: function( itemElem ) {
+        var number = itemElem.querySelector('.number').textContent;
+        return parseInt( number, 10 ) > 50;
+      },
+      // show if name ends with -ium
+      ium: function( itemElem ) {
+        var name = itemElem.querySelector('.name').textContent;
+        return name.match( /ium$/ );
+      }
+    };
+
+    // bind filter button click
+    var filtersElem = document.querySelector('.filters-button-group');
+    filtersElem.addEventListener( 'click', function( event ) {
+      // only work with buttons
+      if ( !matchesSelector( event.target, 'button' ) ) {
+        return;
+      }
+      var filterValue = event.target.getAttribute('data-filter');
+      // use matching filter function
+      filterValue = filterFns[ filterValue ] || filterValue;
+      iso.arrange({ filter: filterValue });
     });
-    $.each(data.licensesAndCertifications, (i, lcct) =>
-      $(".licensesAndCertifications_pdf").append(
-        `<p><a href="${lcct.link}"><b>${lcct.name}</b></a> - ${lcct.institution}</p>`
-      )
-    );
-    //#endregion pdf data
 
-    //#region generate pdf
-    $(document).on("click", "#gpdf", () => {
-      DOC.fromHTML($("#pdf").html(), 20, 0, {
-        width: 550,
-        pagesplit: true,
+    // change is-checked class on buttons
+    var buttonGroups = document.querySelectorAll('.button-group');
+    for ( var i=0, len = buttonGroups.length; i < len; i++ ) {
+      var buttonGroup = buttonGroups[i];
+      radioButtonGroup( buttonGroup );
+    }
+
+    function radioButtonGroup( buttonGroup ) {
+      buttonGroup.addEventListener( 'click', function( event ) {
+        // only work with buttons
+        if ( !matchesSelector( event.target, 'button' ) ) {
+          return;
+        }
+        buttonGroup.querySelector('.is-checked').classList.remove('is-checked');
+        event.target.classList.add('is-checked');
       });
-      DOC.save(`${data.fullName}'s Resume.pdf`);
-    });
-    //#endregion generate pdf
+    }
   });
-  //#endregion local data
-})();
+  
 
-//#region functions
+}
 
-function Show(id) {
-  if (id == ALL) {
-    $(`#${id}`).show();
-    Hide(ASP, ANG);
-    Hide(WORD);
-  } else {
-    $(`#${id}`).show();
+
+// CounterUp Activation
+const wrapper = document.getElementById("funfactId");
+if (wrapper) {
+  const counters = wrapper.querySelectorAll(".js-counter");
+  const duration = 400;
+
+  let isCounted = false;
+  document.addEventListener("scroll", function () {
+    const wrapperPos = wrapper.offsetTop - window.innerHeight;
+    if (!isCounted && window.scrollY > wrapperPos) {
+      counters.forEach((counter) => {
+        const countTo = counter.dataset.count;
+
+        const countPerMs = countTo / duration;
+
+        let currentCount = 0;
+        const countInterval = setInterval(function () {
+          if (currentCount >= countTo) {
+            clearInterval(countInterval);
+          }
+          counter.textContent = Math.round(currentCount);
+          currentCount = currentCount + countPerMs;
+        }, 1);
+      });
+      isCounted = true;
+    }
+  });
+}
+
+// testimonial swiper activation
+var swiper = new Swiper(".testimonial__swiper--activation", {
+  slidesPerView: 1,
+  loop: false,
+  clickable: true,
+  spaceBetween: 30,
+  breakpoints: {
+    0: {
+      slidesPerView: 1,
+    },
+  },
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
+  },
+});
+
+
+/* Offcanvas Mobile Menu Function */
+const offcanvasHeader = function () {
+  const offcanvasOpen = document.querySelector(
+      ".offcanvas__header--menu__open--btn"
+    ),
+    offcanvasClose = document.querySelector(".offcanvas__close--btn"),
+    offcanvasHeader = document.querySelector(".offcanvas__header"),
+    offcanvasMenu = document.querySelector(".offcanvas__menu"),
+    body = document.querySelector("body");
+  /* Offcanvas SubMenu Toggle */
+  if (offcanvasMenu) {
+    offcanvasMenu
+      .querySelectorAll(".offcanvas__sub_menu")
+      .forEach(function (ul) {
+        const subMenuToggle = document.createElement("button");
+        subMenuToggle.classList.add("offcanvas__sub_menu_toggle");
+        ul.parentNode.appendChild(subMenuToggle);
+      });
   }
-}
+  /* Open/Close Menu On Click Toggle Button */
+  if (offcanvasOpen) {
+    offcanvasOpen.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (e.target.dataset.offcanvas != undefined) {
+        offcanvasHeader.classList.add("open");
+        body.classList.add("mobile_menu_open");
+      }
+    });
+  }
+  if (offcanvasClose) {
+    offcanvasClose.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (e.target.dataset.offcanvas != undefined) {
+        offcanvasHeader.classList.remove("open");
+        body.classList.remove("mobile_menu_open");
+      }
+    });
+  }
 
-function Hide(id, all) {
-  $(`#${id}`).hide();
-  $(`#${all}`).hide();
-}
+  /* Mobile submenu slideToggle Activation */
+  let mobileMenuWrapper = document.querySelector(".offcanvas__menu_ul");
+  if (mobileMenuWrapper) {
+    mobileMenuWrapper.addEventListener("click", function (e) {
+      let targetElement = e.target;
+      if (targetElement.classList.contains("offcanvas__sub_menu_toggle")) {
+        const parent = targetElement.parentElement;
+        if (parent.classList.contains("active")) {
+          targetElement.classList.remove("active");
+          parent.classList.remove("active");
+          parent
+            .querySelectorAll(".offcanvas__sub_menu")
+            .forEach(function (subMenu) {
+              subMenu.parentElement.classList.remove("active");
+              subMenu.nextElementSibling.classList.remove("active");
+              slideUp(subMenu);
+            });
+        } else {
+          targetElement.classList.add("active");
+          parent.classList.add("active");
+          slideDown(targetElement.previousElementSibling);
+          getSiblings(parent).forEach(function (item) {
+            item.classList.remove("active");
+            item
+              .querySelectorAll(".offcanvas__sub_menu")
+              .forEach(function (subMenu) {
+                subMenu.parentElement.classList.remove("active");
+                subMenu.nextElementSibling.classList.remove("active");
+                slideUp(subMenu);
+              });
+          });
+        }
+      }
+    });
+  }
 
-function ShowOrHidePortfoliosBasedOnCondition(id) {
-  $(`.${ALL}`).click(() => Show(ALL));
-  $(`.${ASP}`).click(() => (id == ASP ? Show(id) : Hide(id, ALL)));
-  $(`.${ANG}`).click(() => (id == ANG ? Show(id) : Hide(id, ALL)));
-  $(`.${WORD}`).click(() => (id == WORD ? Show(id) : Hide(id, ALL)));
-}
+  if (offcanvasHeader) {
+    document.addEventListener("click", function (event) {
+      if (
+        !event.target.closest(".offcanvas__header--menu__open--btn") &&
+        !event.target.classList.contains(
+          ".offcanvas__header--menu__open--btn".replace(/\./, "")
+        )
+      ) {
+        if (
+          !event.target.closest(".offcanvas__header") &&
+          !event.target.classList.contains(
+            ".offcanvas__header".replace(/\./, "")
+          )
+        ) {
+          offcanvasHeader.classList.remove("open");
+          body.classList.remove("mobile_menu_open");
+        }
+      }
+    });
+  }
 
-function Portfolios(p) {
-  PortfolioHtml(p, ALL);
-  Hide(p.hId, null);
-  ShowOrHidePortfoliosBasedOnCondition(p.hId);
-  PortfolioHtml(p, p.hId);
-}
+  /* Remove Mobile Menu Open Class & Hide Mobile Menu When Window Width in More Than 991 */
+  if (offcanvasHeader) {
+    window.addEventListener("resize", function () {
+      if (window.outerWidth >= 992) {
+        offcanvasHeader.classList.remove("open");
+        body.classList.remove("mobile_menu_open");
+      }
+    });
+  }
+};
+offcanvasHeader();
 
-function PortfolioHtml(p, id) {
-  $(`#${id}`).append(`
-    <div class="tab-content gallery mt-5 col-md-4" style="padding-bottom: 20px">
-      <div class="cc-porfolio-image img-raised" data-aos="fade-up" data-aos-anchor-placement="top-bottom">
-        <a href="${p.link}" target="_blank">
-          <figure class="cc-effect">
-            <img src="${p.imageUrl}" id="${p.hId}-img" alt="${p.name}" />
-              <figcaption>
-                <div class="h4">${p.framework} <i class="fa fa-external-link" aria-hidden="true"></i></div>
-                <p>${p.name}</p>
-                <p>${p.description}</p>
-            </figcaption>
-          </figure>
-        </a>
-      </div>
-    </div>  
-  `);
-}
-//#endregion functions
+// Category Submenu
+const categoryMobileMenu = function () {
+  const CategorySubMenu = document.querySelector(".category__mobile--menu");
+  if (CategorySubMenu) {
+    CategorySubMenu.querySelectorAll(".category__sub--menu").forEach(function (
+      ul
+    ) {
+      let catsubMenuToggle = document.createElement("button");
+      catsubMenuToggle.classList.add("category__sub--menu_toggle");
+      ul.parentNode.appendChild(catsubMenuToggle);
+    });
+  }
+  let categoryMenuWrapper = document.querySelector(
+    ".category__mobile--menu_ul"
+  );
+  if (categoryMenuWrapper) {
+    categoryMenuWrapper.addEventListener("click", function (e) {
+      let targetElement = e.target;
+      if (targetElement.classList.contains("category__sub--menu_toggle")) {
+        const parent = targetElement.parentElement;
+        if (parent.classList.contains("active")) {
+          targetElement.classList.remove("active");
+          parent.classList.remove("active");
+          parent
+            .querySelectorAll(".category__sub--menu")
+            .forEach(function (subMenu) {
+              subMenu.parentElement.classList.remove("active");
+              subMenu.nextElementSibling.classList.remove("active");
+              slideUp(subMenu);
+            });
+        } else {
+          targetElement.classList.add("active");
+          parent.classList.add("active");
+          slideDown(targetElement.previousElementSibling);
+          getSiblings(parent).forEach(function (item) {
+            item.classList.remove("active");
+            item
+              .querySelectorAll(".category__sub--menu")
+              .forEach(function (subMenu) {
+                subMenu.parentElement.classList.remove("active");
+                subMenu.nextElementSibling.classList.remove("active");
+                slideUp(subMenu);
+              });
+          });
+        }
+      }
+    });
+  }
+};
+categoryMobileMenu();
+
+// Newsletter popup
+const newsletterPopup = function () {
+  let newsletterWrapper = document.querySelector(".newsletter__popup"),
+    newsletterCloseButton = document.querySelector(
+      ".newsletter__popup--close__btn"
+    ),
+    dontShowPopup = document.querySelector("#newsletter__dont--show"),
+    popuDontShowMode = localStorage.getItem("newsletter__show");
+
+  if (newsletterWrapper && popuDontShowMode == null) {
+    window.addEventListener("load", (event) => {
+      setTimeout(function () {
+        document.body.classList.add("overlay__active");
+        newsletterWrapper.classList.add("newsletter__show");
+
+        document.addEventListener("click", function (event) {
+          if (!event.target.closest(".newsletter__popup--inner")) {
+            document.body.classList.remove("overlay__active");
+            newsletterWrapper.classList.remove("newsletter__show");
+          }
+        });
+
+        newsletterCloseButton.addEventListener("click", function () {
+          document.body.classList.remove("overlay__active");
+          newsletterWrapper.classList.remove("newsletter__show");
+        });
+
+        dontShowPopup.addEventListener("click", function () {
+          if (dontShowPopup.checked) {
+            localStorage.setItem("newsletter__show", true);
+          } else {
+            localStorage.removeItem("newsletter__show");
+          }
+        });
+      }, 3000);
+    });
+  }
+};
+newsletterPopup();
+
+

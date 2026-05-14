@@ -1,15 +1,15 @@
 // const IMG = new Image();
 // const EMAIL_PATTERNS = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
 const DOC = new jsPDF("p", "pt", "A4");
-const ALL = "all";
-const ASP = "aspnet";
-const ANG = "angular";
-const WORD = "wordpress";
+var portfolioIds = ["all", "aspnet", "angular", "wordpress"];
 
 // getPlatformName = (s) => console.log(s[0].link);
 
 // data
 (async () => {
+
+  let inner = '';
+
   //#region cloud data
   // const response = await fetch('https://api.perspective-v.com/graph/resume', {
   //     method: 'POST',
@@ -44,15 +44,15 @@ const WORD = "wordpress";
     // document.querySelector('.linkedIn_pdf').href = getPlatformName(data.socailLinks);
     $(".aboutMe").append(data.about);
     // $(".miniIntro").append();
-    var basicInformation = [
-      "Mobile",
+    var basicInformationheadings = [
+      // "Mobile",
       "Email",
       "Address",
       "Industry",
       "Languages",
     ];
-    $.each(basicInformation, (i, value) => {
-      $(".pInfo .text-uppercase").append(value + ":" + "<br><br>");
+    $.each(basicInformationheadings, (i, heading) => {
+      $(".pInfo .text-uppercase").append(heading + ":" + "<br><br>");
     });
     $.each(data.basicInfo, (i, value) => {
       $(".pInfoValue").append(
@@ -85,13 +85,14 @@ const WORD = "wordpress";
         <li class="nav-item ${ph.link}"><a class="nav-link ${ph.active}" data-toggle="tab" href="#${ph.link}" role="tablist">${ph.name}</a></li>
       `);
     });
-
+    
+    $.each(portfolioIds, (i, portfolioId) => {
+      inner += `<div class="row" id="${portfolioId}"></div>`;
+    });
+    
     $(`#portfolios .container`).append(`
       <div class="tab-pane">
-        <div class="row" id="${ALL}"></div>
-        <div class="row" id="${ASP}"></div>
-        <div class="row" id="${ANG}"></div>
-        <div class="row" id="${WORD}"></div>
+        ${inner}
       </div>
     `);
 
@@ -125,27 +126,27 @@ const WORD = "wordpress";
     //#endregion experiences
 
     //#region education
-    $.each(data.education, (i, edu) => {
-      $(".education-list").append(`
-            <div class="card">
-                <div class="row education">
-                    <div class="col-md-3 bg-primary" data-aos="fade-right" data-aos-offset="50" data-aos-duration="500">
-                        <div class="card-body cc-education-header">
-                            <p>${edu.yearOfGraduation}</p>
-                            <div class="h5">${edu.degree}</div>
-                        </div>
-                    </div>
-                    <div class="col-md-9" data-aos="fade-left" data-aos-offset="50" data-aos-duration="500">
-                        <div class="card-body">
-                            <div class="h5">${edu.subject}</div>
-                            <p class="category">${edu.institution}</p>
-                            <p>${edu.summary}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `);
-    });
+    // $.each(data.education, (i, edu) => {
+    //   $(".education-list").append(`
+    //         <div class="card">
+    //             <div class="row education">
+    //                 <div class="col-md-3 bg-primary" data-aos="fade-right" data-aos-offset="50" data-aos-duration="500">
+    //                     <div class="card-body cc-education-header">
+    //                         <p>${edu.yearOfGraduation}</p>
+    //                         <div class="h5">${edu.degree}</div>
+    //                     </div>
+    //                 </div>
+    //                 <div class="col-md-9" data-aos="fade-left" data-aos-offset="50" data-aos-duration="500">
+    //                     <div class="card-body">
+    //                         <div class="h5">${edu.subject}</div>
+    //                         <p class="category">${edu.institution}</p>
+    //                         <p>${edu.summary}</p>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     `);
+    // });
     //#endregion education
 
     //#region testimonials
@@ -182,40 +183,33 @@ const WORD = "wordpress";
     //#endregion testimonials
 
     //#region pdf data
-    $(".username_pdf").append(data.fullName);
-    $(".profession_pdf").append(data.profession);
-    $(".address_pdf").append(data.basicInfo.address);
-    $(".mailAndMobile_pdf").append(
-      data.basicInfo.mobile + " - " + data.basicInfo.email
-    );
-    $(".about_pdf").append(data.about);
+    $(".username_pdf").append(`<strong style="text-align: center; line-height: 1.5;">${data.fullName}</strong>`);
+    $(".profession_pdf").append(`<strong style="text-align: center; line-height: 1.5;">${data.profession}</strong>`);
+    $(".address_pdf").append(`<strong style="text-align: center; line-height: 1.5;">${data.basicInfo.address}</strong>`);
+    $(".mailAndMobile_pdf").append(`<strong style="text-align: center; line-height: 1.5;">${data.basicInfo.email}</strong>`);
     // doc.textWithLink(text, {url: getPlatformName(data.links) });
     // document.querySelector(".linkedIn_pdf").href = getPlatformName(
-    //   data.socialLinks
-    // );
+      //   data.socialLinks
+      // );
+    $(".about_pdf").append(`<span style="line-height: 1.2;">${data.about}</span>`);
     $.each(data.skills, (i, skill) =>
-      $(".skill_pdf").append(`${skill.name}, `)
-    );
-    $.each(data.education, (i, edu) =>
-      $(".education_pdf").append(
-        `<p>${edu.institution} - ${edu.subject}<br>${edu.yearOfGraduation}</p><br>`
-      )
+      $(".skill_pdf").append(`<span style="line-height: 1.2;">${skill.name}, </span>`)
     );
     $.each(data.experiences, (i, exp) => {
       $(".experience_pdf").append(
-        `<p><b>${exp.profession} - ${exp.company}</b><br>${exp.duration}<br>${exp.description}</p><br>`
+        `<p style="line-height: 1.2;"><b>${exp.profession} - ${exp.company}</b><br>${exp.duration}<br>${exp.description}</p>`
       );
     });
-    $.each(data.licensesAndCertifications, (i, lcct) =>
-      $(".licensesAndCertifications_pdf").append(
-        `<p><a href="${lcct.link}"><b>${lcct.name}</b></a> - ${lcct.institution}</p>`
+    $.each(data.education, (i, edu) =>
+      $(".education_pdf").append(
+        `<p>${edu.institution} - ${edu.subject}<br>${edu.yearOfGraduation}</p>`
       )
     );
     //#endregion pdf data
 
     //#region generate pdf
     $(document).on("click", "#gpdf", () => {
-      DOC.fromHTML($("#pdf").html(), 20, 0, {
+      DOC.fromHTML($("#pdf").html(), 20, 10, {
         width: 550,
         pagesplit: true,
       });
@@ -228,11 +222,21 @@ const WORD = "wordpress";
 
 //#region functions
 
+async function loadFontAndInit() {
+  const res = await fetch('assets/fonts/montserrat/montserrat-regular.ttf');
+  console.log(res.status);
+  const buf = await res.arrayBuffer();
+  const b64 = btoa(String.fromCharCode(...new Uint8Array(buf)));
+  DOC.addFileToVFS('assets/fonts/montserrat/montserrat-regular.ttf', b64);
+  DOC.addFont('assets/fonts/montserrat/montserrat-regular.ttf', 'Montserrat', 'normal');
+  DOC.setFont('Montserrat', 'normal');
+}
+
 function Show(id) {
-  if (id == ALL) {
+  if (id == portfolioIds.at(0)) {
     $(`#${id}`).show();
-    Hide(ASP, ANG);
-    Hide(WORD);
+    Hide(portfolioIds.at(1), portfolioIds.at(2));
+    Hide(portfolioIds.at(3));
   } else {
     $(`#${id}`).show();
   }
@@ -244,14 +248,14 @@ function Hide(id, all) {
 }
 
 function ShowOrHidePortfoliosBasedOnCondition(id) {
-  $(`.${ALL}`).click(() => Show(ALL));
-  $(`.${ASP}`).click(() => (id == ASP ? Show(id) : Hide(id, ALL)));
-  $(`.${ANG}`).click(() => (id == ANG ? Show(id) : Hide(id, ALL)));
-  $(`.${WORD}`).click(() => (id == WORD ? Show(id) : Hide(id, ALL)));
+  $.each(portfolioIds, (i, portfolioId) => {
+    $(`.${portfolioIds.at(0)}`).click(() => Show(portfolioIds.at(0)));
+    $(`.${portfolioId}`).click(() => (id == portfolioId ? Show(id) : Hide(id, portfolioIds.at(0))));
+  });
 }
 
 function Portfolios(p) {
-  PortfolioHtml(p, ALL);
+  PortfolioHtml(p, portfolioIds.at(0));
   Hide(p.hId, null);
   ShowOrHidePortfoliosBasedOnCondition(p.hId);
   PortfolioHtml(p, p.hId);

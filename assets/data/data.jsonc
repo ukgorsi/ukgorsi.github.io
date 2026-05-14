@@ -167,17 +167,31 @@
     "experiences": [
         {
             "company": "TareenSoft",
-            "profession": "Full Stack Developer",
+            "profession": "Angular Developer",
             "duration": "January 2024 - Present",
             "companyLogo": "images/placeholder-400x400.gif",
-            "description": "Contributing in the development of a comprehensive, all-in-one software solution for travel agencies to streamline operations and enhance service offerings. Some of the key features are follows. \n<br> <b>Accounting:</b> Financial transaction management, invoicing, and reporting tools. <br> <b>CRM:</b> Client interaction management, lead tracking, and customer data maintenance. <br> <b>Mid-Office:</b> Reservation handling, itinerary management, and operational task solutions."
+            "description": "Contributing in the development of  a comprehensive, all-in-one software solution for travel agencies to streamline operations and enhance service offerings. <br>\n <b>Key-Features</b> <br>\n Accounting: Financial transaction management, invoicing, and reporting tools. <br> CRM: Client interaction management, lead tracking, and customer data maintenance. <br> Mid-Office: Reservation handling, itinerary management, and operational task solutions."
         },
         {
             "company": "Freelancing",
             "profession": "Full Stack Developer",
             "duration": "March 2020 - January 2024",
             "companyLogo": "images/placeholder-400x400.gif",
-            "description": "As a freelancer I got the opportunatiy to work on multiple technologies such as Asp.net, Angular, Angular Dart, and WordPress. Using these languages I have worked on multiple projects, some of which are listed below: \n<br> 1) My Life You Choose (Asp.Net MVC) <br>2) AM-Brisbane-Psychology (Asp.Net Razor Pages) <br>3) Ease My Sales (Angular) <br>4) Pagric Web Application (Angular) <br>5) Tamino Autograph (WordPress) \n6) Roofers Free Zone Co (WordPress)"
+            "description": "As a freelancer I got the opportunatiy to work on multiple technologies such as Asp.net, Angular, Angular Dart, and WordPress. Using these languages I have worked on some of the projects listed below: \n\n &#x2022; My Life You Choose (Asp.Net MVC) \n &#x2022; AM-Brisbane-Psychology (Asp.Net Razor Pages) \n &#x2022; Ease My Sales (Angular) \n &#x2022; Pagric Web Application (Angular) \n &#x2022; Tipnet (Angular) \n &#x2022; Tamino Autograph (WordPress) \n &#x2022; Roofers Free Zone Co (WordPress)"
+        },
+        {
+            "company": "Perspective-v",
+            "profession": "Full Stack Developer",
+            "duration": "August 2021 - December 2022",
+            "companyLogo": "images/placeholder-400x400.gif",
+            "description": "During my time at perspective-v, I worked as an Asp.Net, and Angular developer. I gained hands-on experience with Ag-Grid, Nx-Workspaces, Angular DataTables, Syncfusion, and more. I have worked on variety of projects, Including: \n\n &#x2022; Learn Quran Live Academy (Asp.Net 6)\n &#x2022; Flat Management System (Angular)\n &#x2022; Client Management Website (Angular + Asp.Net)"
+        },
+        {
+            "company": "Gorsi Shop",
+            "profession": "Full Stack Developer",
+            "duration": "Mar 2019 - Jan 2020",
+            "companyLogo": "images/placeholder-400x400.gif",
+            "description": "In my time at Gorsi Shop, I have created their E-Commerce website in Wordpress as well as in Asp.Net Core MVC, named Gorsi Shop. Once in Asp.net Core and the second iteration in WordPress. \n Gorsi Shop is an e-commerce website that allows whole sellers to buy any IT related items such as keyboards, mouse, printers, projectors etc. And a complete admin panel is implemented for the admins of the site to manage products, orders and view reviews on different projects. \n\n Tools: \n1st Iteration: \n&#x2022; Front-end: Html, Css, jQuery \n&#x2022; Back-end: Asp.Net Core 2.0, Entity Framework Core \n\n 2nd Iteration: \n&#x2022; WordPress"
         }
     ],
     "education": [

@@ -156,3 +156,50 @@
 }
 
 /*#endregion download button */
+
+
+.pdf-template {
+  width: 794px;
+  padding: 40px;
+  background: white;
+  color: black;
+
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+
+  position: absolute;
+  left: -9999px;
+  top: 0;
+}
+
+.pdf-header {
+  text-align: center;
+}
+
+.pdf-section {
+  margin-top: 25px;
+}
+
+.pdf-section h2 {
+  border-bottom: 1px solid #333;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+.pdf-job {
+  margin-bottom: 20px;
+}
+
+.pdf-job-title {
+  font-weight: bold;
+}
+
+.pdf-skills span {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.pdf-job p {
+  white-space: pre-line;
+}

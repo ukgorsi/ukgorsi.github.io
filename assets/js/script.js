@@ -202,7 +202,7 @@ var portfolioIds = ["all", "aspnet", "angular", "wordpress"];
     });
     $.each(data.education, (i, edu) =>
       $(".education_pdf").append(
-        `<p>${edu.institution} - ${edu.subject}<br>${edu.yearOfGraduation}</p>`
+        `<p>${edu.institution} - ${edu.subject} (${edu.yearOfGraduation})</p>`
       )
     );
     //#endregion pdf data

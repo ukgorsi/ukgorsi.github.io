@@ -22,75 +22,6 @@
 
 /*#endregion portfolio  */
 
-/*#region expereince */
-.experiences .experience-title {
-    font-size: 26px;
-    font-weight: 700;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    color: #fff;
-}
-
-.experiences .experience-item {
-    padding: 0 0 20px 20px;
-    margin-top: -2px;
-    border-left: 2px solid rgba(255, 255, 255, 0.2);
-    position: relative;
-}
-
-.experiences .experience-item h4 {
-    line-height: 18px;
-    font-size: 18px;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-family: "Poppins", sans-serif;
-    color: #18d26e;
-    margin-bottom: 10px;
-}
-
-.experiences .experience-item h5 {
-    font-size: 16px;
-    background: rgba(255, 255, 255, 0.15);
-    padding: 5px 15px;
-    display: inline-block;
-    font-weight: 600;
-    margin-bottom: 10px;
-}
-
-.experiences .experience-item ul {
-    padding-left: 20px;
-}
-
-.experiences .experience-item ul li {
-    padding-bottom: 10px;
-}
-
-.experiences .experience-item:last-child {
-    padding-bottom: 0;
-}
-
-.experiences .experience-item::before {
-    content: "";
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    border-radius: 50px;
-    left: -9px;
-    top: 0;
-    background: #18d26e;
-    border: 2px solid #18d26e;
-}
-
-.tabSpace {
-    margin-left: 20px;
-}
-
-.cc-education {
-    margin-top: -50px;
-}
-
-/*#endregion expereince */
-
 /*#region download button */
 .buttonHolder {
     bottom: 1%;
@@ -157,53 +88,6 @@
 
 /*#endregion download button */
 
-
-.pdf-template {
-    width: 794px;
-    padding: 40px;
-    background: white;
-    color: black;
-
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.5;
-
-    position: absolute;
-    left: -9999px;
-    top: 0;
-}
-
-.pdf-header {
-    text-align: center;
-}
-
-.pdf-section {
-    margin-top: 25px;
-}
-
-.pdf-section h2 {
-    border-bottom: 1px solid #333;
-    padding-bottom: 5px;
-    margin-bottom: 10px;
-}
-
-.pdf-job {
-    margin-bottom: 20px;
-}
-
-.pdf-job-title {
-    font-weight: bold;
-}
-
-.pdf-skills span {
-    display: inline-block;
-    margin-right: 10px;
-}
-
-.pdf-job p {
-    white-space: pre-line;
-}
-
 .offscreen-capture {
     position: absolute;
     left: -9999px;
@@ -211,25 +95,8 @@
     width: 500px;
 }
 
-/*#endregion expereince */
-
-.experience_pdf p {
-    white-space: pre-line;
-    /* Changed from normal to handle \n properly */
-    word-break: break-word;
-    /* Break on any character if needed */
-    line-height: 1.4;
-    /* Slightly better for PDF rendering */
-    font-size: 12pt;
-    /* Use larger font size for readability */
-}
-
 .experience_pdf p b,
 .experience_pdf p strong {
     display: inline;
-    /* Changed from inline-block to allow wrapping */
     word-break: break-word;
-    /* Allow text inside bold/strong to wrap */
 }
-
-/*#endregion download button */

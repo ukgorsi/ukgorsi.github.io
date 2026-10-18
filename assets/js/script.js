@@ -85,11 +85,11 @@ var portfolioIds = ["all", "aspnet", "angular", "wordpress"];
         <li class="nav-item ${ph.link}"><a class="nav-link ${ph.active}" data-toggle="tab" href="#${ph.link}" role="tablist">${ph.name}</a></li>
       `);
     });
-    
+
     $.each(portfolioIds, (i, portfolioId) => {
       inner += `<div class="row" id="${portfolioId}"></div>`;
     });
-    
+
     $(`#portfolios .container`).append(`
       <div class="tab-pane">
         ${inner}
@@ -189,8 +189,8 @@ var portfolioIds = ["all", "aspnet", "angular", "wordpress"];
     $(".mailAndMobile_pdf").append(`<strong style="text-align: center; line-height: 1.5;">${data.basicInfo.email}</strong>`);
     // doc.textWithLink(text, {url: getPlatformName(data.links) });
     // document.querySelector(".linkedIn_pdf").href = getPlatformName(
-      //   data.socialLinks
-      // );
+    //   data.socialLinks
+    // );
     $(".about_pdf").append(`<span style="line-height: 1.2;">${data.about}</span>`);
     $.each(data.skills, (i, skill) =>
       $(".skill_pdf").append(`<span style="line-height: 1.2;">${skill.name}, </span>`)

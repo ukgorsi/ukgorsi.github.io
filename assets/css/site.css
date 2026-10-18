@@ -159,47 +159,77 @@
 
 
 .pdf-template {
-  width: 794px;
-  padding: 40px;
-  background: white;
-  color: black;
+    width: 794px;
+    padding: 40px;
+    background: white;
+    color: black;
 
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
 
-  position: absolute;
-  left: -9999px;
-  top: 0;
+    position: absolute;
+    left: -9999px;
+    top: 0;
 }
 
 .pdf-header {
-  text-align: center;
+    text-align: center;
 }
 
 .pdf-section {
-  margin-top: 25px;
+    margin-top: 25px;
 }
 
 .pdf-section h2 {
-  border-bottom: 1px solid #333;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .pdf-job {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .pdf-job-title {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .pdf-skills span {
-  display: inline-block;
-  margin-right: 10px;
+    display: inline-block;
+    margin-right: 10px;
 }
 
 .pdf-job p {
-  white-space: pre-line;
+    white-space: pre-line;
 }
+
+.offscreen-capture {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    width: 500px;
+}
+
+/*#endregion expereince */
+
+.experience_pdf p {
+    white-space: pre-line;
+    /* Changed from normal to handle \n properly */
+    word-break: break-word;
+    /* Break on any character if needed */
+    line-height: 1.4;
+    /* Slightly better for PDF rendering */
+    font-size: 12pt;
+    /* Use larger font size for readability */
+}
+
+.experience_pdf p b,
+.experience_pdf p strong {
+    display: inline;
+    /* Changed from inline-block to allow wrapping */
+    word-break: break-word;
+    /* Allow text inside bold/strong to wrap */
+}
+
+/*#endregion download button */

@@ -94,9 +94,3 @@
     top: 0;
     width: 500px;
 }
-
-.experience_pdf p b,
-.experience_pdf p strong {
-    display: inline;
-    word-break: break-word;
-}

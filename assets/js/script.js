@@ -1,6 +1,6 @@
 // const IMG = new Image();
 // const EMAIL_PATTERNS = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-const DOC = new jsPDF("p", "pt", "A4");
+
 var portfolioIds = ["all", "aspnet", "angular", "wordpress"];
 
 // getPlatformName = (s) => console.log(s[0].link);
@@ -126,27 +126,27 @@ var portfolioIds = ["all", "aspnet", "angular", "wordpress"];
     //#endregion experiences
 
     //#region education
-    // $.each(data.education, (i, edu) => {
-    //   $(".education-list").append(`
-    //         <div class="card">
-    //             <div class="row education">
-    //                 <div class="col-md-3 bg-primary" data-aos="fade-right" data-aos-offset="50" data-aos-duration="500">
-    //                     <div class="card-body cc-education-header">
-    //                         <p>${edu.yearOfGraduation}</p>
-    //                         <div class="h5">${edu.degree}</div>
-    //                     </div>
-    //                 </div>
-    //                 <div class="col-md-9" data-aos="fade-left" data-aos-offset="50" data-aos-duration="500">
-    //                     <div class="card-body">
-    //                         <div class="h5">${edu.subject}</div>
-    //                         <p class="category">${edu.institution}</p>
-    //                         <p>${edu.summary}</p>
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     `);
-    // });
+    $.each(data.education, (i, edu) => {
+      $(".education-list").append(`
+            <div class="card">
+                <div class="row education">
+                    <div class="col-md-3 bg-primary" data-aos="fade-right" data-aos-offset="50" data-aos-duration="500">
+                        <div class="card-body cc-education-header">
+                            <p>${edu.yearOfGraduation}</p>
+                            <div class="h5">${edu.degree}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-9" data-aos="fade-left" data-aos-offset="50" data-aos-duration="500">
+                        <div class="card-body">
+                            <div class="h5">${edu.subject}</div>
+                            <p class="category">${edu.institution}</p>
+                            <p>${edu.summary}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
+    });
     //#endregion education
 
     //#region testimonials
@@ -183,39 +183,61 @@ var portfolioIds = ["all", "aspnet", "angular", "wordpress"];
     //#endregion testimonials
 
     //#region pdf data
-    $(".username_pdf").append(`<strong style="text-align: center; line-height: 1.5;">${data.fullName}</strong>`);
-    $(".profession_pdf").append(`<strong style="text-align: center; line-height: 1.5;">${data.profession}</strong>`);
-    $(".address_pdf").append(`<strong style="text-align: center; line-height: 1.5;">${data.basicInfo.address}</strong>`);
-    $(".mailAndMobile_pdf").append(`<strong style="text-align: center; line-height: 1.5;">${data.basicInfo.email}</strong>`);
+    $(".username_pdf").append(`<strong style="display: block; text-align: center; line-height: 1.5;">${data.fullName}</strong>`);
+    $(".profession_pdf").append(`<strong style="display: block; text-align: center; line-height: 1.5;">${data.profession}</strong>`);
+    $(".address_pdf").append(`<strong style="display: block; text-align: center; line-height: 1.5;">${data.basicInfo.address}</strong>`);
+    $(".mailAndMobile_pdf").append(`<strong style="display: block; text-align: center; line-height: 1.5;">${data.basicInfo.email}</strong>`);
     // doc.textWithLink(text, {url: getPlatformName(data.links) });
     // document.querySelector(".linkedIn_pdf").href = getPlatformName(
     //   data.socialLinks
     // );
-    $(".about_pdf").append(`<span style="line-height: 1.2;">${data.about}</span>`);
+    $(".about_pdf").append(`<span style="font-size: 11px;">${data.about}</span>`);
     $.each(data.skills, (i, skill) =>
-      $(".skill_pdf").append(`<span style="line-height: 1.2;">${skill.name}, </span>`)
+      $(".skill_pdf").append(`<span style="font-size: 11px;">${skill.name}, </span>`)
     );
     $.each(data.experiences, (i, exp) => {
       $(".experience_pdf").append(
-        `<p style="line-height: 1.2;"><b>${exp.profession} - ${exp.company}</b><br>${exp.duration}<br>${exp.description}</p>`
+        `<p style="font-size: 11px;"><b>${exp.profession} - ${exp.company}</b><br>${exp.duration}<br>${exp.description}</p>`
       );
     });
     $.each(data.education, (i, edu) =>
       $(".education_pdf").append(
-        `<p>${edu.institution} - ${edu.subject} (${edu.yearOfGraduation})</p>`
+        `<p style="font-size: 11px; line-height: 1.2px;">${edu.institution} - ${edu.subject} (${edu.yearOfGraduation})</p>`
       )
     );
     //#endregion pdf data
 
     //#region generate pdf
-    $(document).on("click", "#gpdf", () => {
-      DOC.fromHTML($("#pdf").html(), 20, 10, {
-        width: 550,
-        pagesplit: true,
+    const { jsPDF } = window.jspdf;
+    const DOC = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
+    const PAGE_MARGIN = 20;
+    const CONTENT_WIDTH = DOC.internal.pageSize.getWidth() - PAGE_MARGIN * 2;
+
+    $(document).on("click", "#gpdf", (event) => {
+      event.preventDefault();
+      $("#pdf").css("width", `${CONTENT_WIDTH}px`);
+      DOC.html(document.querySelector("#pdf"), {
+        margin: [10, PAGE_MARGIN, 10, PAGE_MARGIN],
+        width: CONTENT_WIDTH,
+        windowWidth: CONTENT_WIDTH,
+        html2canvas: {
+          onclone: (clonedDocument) => {
+            const clonedPdf = clonedDocument.querySelector("#pdf");
+            clonedPdf.style.position = "static";
+            clonedPdf.style.left = "0";
+            clonedPdf.style.top = "0";
+            clonedPdf.style.textAlign = "left";
+          },
+        },
+        autoPaging: "text",
+        callback: (doc) => {
+          doc.save(`${data.fullName}'s Resume.pdf`);
+        },
       });
-      DOC.save(`${data.fullName}'s Resume.pdf`);
     });
     //#endregion generate pdf
+  }).fail(function (jqXHR, textStatus, errorThrown) {
+    console.error("Could not load data.json:", textStatus, errorThrown);
   });
   //#endregion local data
 })();

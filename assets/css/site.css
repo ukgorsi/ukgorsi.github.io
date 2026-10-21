@@ -88,9 +88,8 @@
 
 /*#endregion download button */
 
-.offscreen-capture {
-    position: absolute;
-    left: -9999px;
-    top: 0;
-    width: 500px;
+/* Use this instead of Bootstrap's d-none */
+.pdf-source {
+    position: fixed;
+    color: black;
 }
